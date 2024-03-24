@@ -298,6 +298,13 @@ class HiYaPyCo:
         except TemplateError as e:
             # FIXME: this seems to be broken for unicode str?
             raise HiYaPyCoImplementationException('error interpolating string "%s" : %s' % (s, e,))
+
+        if self.castinterpolated:
+            regex = re.compile(
+                r'((((?<!\w)[A-Z,a-z]:)|(\.{1,2}\\))([^\b%/|:\n\"]*))|("\2([^%/|:\n\"]*)")|((?<!\w)(\.{1,2})?(?<!/)(/((\\\b)|[^ \b%|:\n\"\\/])+)+/?)')
+            if regex.match(si):
+                return pathlib.Path(si)
+
         if not s == si:
             if self.castinterpolated:
                 if not re.match( r'^\d+\.*\d*$', si):
