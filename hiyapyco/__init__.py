@@ -22,6 +22,7 @@ from __future__ import unicode_literals
 import sys
 import os
 import logging
+import pathlib
 from distutils.util import strtobool
 import re
 import io
@@ -267,6 +268,8 @@ class HiYaPyCo:
         logger.debug('interpolate "%s" of type %s ...' % (d, type(d),))
         if d is None:
             return None
+        if isinstance(d, pathlib.Path):
+            return self._interpolatepath(d)
         if isinstance(d, strTypes):
             return self._interpolatestr(d)
         if isinstance(d, primitiveTypes):
@@ -280,6 +283,14 @@ class HiYaPyCo:
                 d[k] = self._interpolate(d[k])
             return d
         raise HiYaPyCoImplementationException('can not interpolate "%s" of type %s' % (d, type(d),))
+
+    def _interpolatepath(self, p):
+        try:
+            si = jinja2env.from_string(p.as_posix()).render(self._data)
+        except TemplateError as e:
+            # FIXME: this seems to be broken for unicode str?
+            raise HiYaPyCoImplementationException('error interpolating Path "%s" : %s' % (p, e,))
+        return pathlib.Path(si)
 
     def _interpolatestr(self, s):
         try:
