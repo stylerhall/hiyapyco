@@ -484,10 +484,14 @@ class HiYaPyCo:
                             (type(b), a, b,)
                             )
             else:
-                raise HiYaPyCoImplementationException(
-                        'can not merge %s to %s (@ "%s" try to merge "%s")' %
-                        (type(b), type(a), a, b,)
-                        )
+                # TODO: shall - sethhallvfx@gmail.com
+                #   disabled the exception below to prevent  empty yaml
+                #   files from failing to merge as 'None'.
+                pass
+                # raise HiYaPyCoImplementationException(
+                #         'can not merge %s to %s (@ "%s" try to merge "%s")' %
+                #         (type(b), type(a), a, b,)
+                #         )
         logger.debug('end deepmerge part: return: "%s"' % a)
         logger.debug('<'*30)
         return a
