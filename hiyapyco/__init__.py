@@ -268,6 +268,8 @@ class HiYaPyCo:
         logger.debug('interpolate "%s" of type %s ...' % (d, type(d),))
         if d is None:
             return None
+        # TODO: shall - sethhallvfx@gmail.com
+        #   adding support for pathlib.Path
         if isinstance(d, pathlib.Path):
             return self._interpolatepath(d)
         if isinstance(d, strTypes):
@@ -285,6 +287,8 @@ class HiYaPyCo:
         raise HiYaPyCoImplementationException('can not interpolate "%s" of type %s' % (d, type(d),))
 
     def _interpolatepath(self, p):
+        # TODO: shall - sethhallvfx@gmail.com
+        #   adding support for pathlib.Path
         try:
             si = jinja2env.from_string(p.as_posix()).render(self._data)
         except TemplateError as e:
@@ -300,6 +304,8 @@ class HiYaPyCo:
             raise HiYaPyCoImplementationException('error interpolating string "%s" : %s' % (s, e,))
 
         if self.castinterpolated:
+            # TODO: shall - sethhallvfx@gmail.com
+            #   this performs a regex match to determine if the string is a file path
             regex = re.compile(
                 r'((((?<!\w)[A-Z,a-z]:)|(\.{1,2}\\))([^\b%/|:\n\"]*))|("\2([^%/|:\n\"]*)")|((?<!\w)(\.{1,2})?(?<!/)(/((\\\b)|[^ \b%|:\n\"\\/])+)+/?)')
             if regex.match(si):
@@ -487,11 +493,11 @@ class HiYaPyCo:
                 # TODO: shall - sethhallvfx@gmail.com
                 #   disabled the exception below to prevent  empty yaml
                 #   files from failing to merge as 'None'.
-                pass
                 # raise HiYaPyCoImplementationException(
                 #         'can not merge %s to %s (@ "%s" try to merge "%s")' %
                 #         (type(b), type(a), a, b,)
                 #         )
+                pass
         logger.debug('end deepmerge part: return: "%s"' % a)
         logger.debug('<'*30)
         return a
